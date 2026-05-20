@@ -1,2 +1,2 @@
 # JCalc
-Calculator in Java with GUI 
+Complex Calculator in Java with GUI using JavaFX
