@@ -1,0 +1,624 @@
+package com.complexcalc.evaluator;
+
+/**
+ * complex number class that is faster by only calculating polar coordinates when needed
+ */
+public class FastComplex {
+
+    public final double a, b;
+
+    public FastComplex(double a, double b) {
+        this.a = a;
+        this.b = b;
+    }
+
+    /**
+     * returns a new complex from the polar form input re^(iθ)
+     * @param magnitude r
+     * @param argument θ
+     */
+    public static FastComplex polar(double magnitude, double argument) {
+        double a = magnitude * Math.cos(argument);
+        double b = magnitude * Math.sin(argument);
+        return new FastComplex(a, b);
+    }
+
+    /**
+     * returns i in the form of a complex
+     */
+    public static FastComplex i() {
+        return new FastComplex(0, 1);
+    }
+
+    /**
+     * returns a full Complex with polar coordinates
+     */
+    public Complex full() {
+        return new Complex(a, b);
+    }
+
+    public double mag() {
+        return Math.hypot(a, b);
+    }
+
+    public double arg() {
+        return Math.atan2(b, a);
+    }
+
+    public static FastComplex invert(FastComplex z) {
+        return new FastComplex(-z.a, z.b == 0 ? 0 : -z.b);
+    }
+
+    /**
+     * returns the sum of two complex numbers
+     * @param z summand
+     * @param w summand
+     */
+    public static FastComplex add(FastComplex z, FastComplex w) {
+        return new FastComplex(z.a + w.a, z.b + w.b);
+    }
+
+    /**
+     * returns the sum of a real number and a complex number
+     * @param z complex summand
+     * @param x real summand
+     * @return complex sum
+     */
+    public static FastComplex add(FastComplex z, double x) {
+        return new FastComplex(z.a + x, z.b);
+    }
+
+    /**
+     * returns the difference between two complex numbers
+     * @param z complex minuend
+     * @param w complex subtrahend
+     * @return complex difference
+     */
+    public static FastComplex sub(FastComplex z, FastComplex w) {
+        return new FastComplex(z.a - w.a, z.b - w.b);
+    }
+
+    /**
+     * returns the difference between a complex and a real number
+     * @param z complex minuend
+     * @param x real subtrahend
+     * @return complex difference
+     */
+    public static FastComplex sub(FastComplex z, double x) {
+        return new FastComplex(z.a - x, z.b);
+    }
+
+    /**
+     * returns the difference between a real and a complex number
+     * @param x real minuend
+     * @param z complex subtrahend
+     * @return complex difference
+     */
+    public static FastComplex sub(double x, FastComplex z) {
+        return new FastComplex(x - z.a, -z.b);
+    }
+
+    /**
+     * returns true if the number is fully real (no imaginary part)
+     */
+    public boolean isReal() {
+        return b == 0;
+    }
+
+    /**
+     * returns the int number of the quadrant of the complex number <p>
+     * considers numbers on the axes as part of the lowest numbered quadrant they're in <p>
+     * quadrants are numbered counterclockwise starting from the positive real and positive imaginary
+     */
+    public static int quadrant(FastComplex z) {
+        if (z.a >= 0 && z.b >= 0) return 1;
+        if (z.a < 0 && z.b >= 0) return 2;
+        if (z.a <= 0 && z.b <= 0) return 3;
+        return 4;
+    }
+
+    /**
+     * returns rounded real and imaginary parts of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex round(FastComplex z) {
+        return new FastComplex(Math.round(z.a), Math.round(z.b));
+    }
+
+    /**
+     * returns a new complex with the floor of both parts of complex z
+     * @param z complex argument
+     */
+    public static FastComplex floor(FastComplex z) {
+        return new FastComplex(Math.floor(z.a), Math.floor(z.b));
+    }
+
+    /**
+     * returns a new complex with the ceiling of both parts of complex z
+     * @param z complex argument
+     */
+    public static FastComplex ceil(FastComplex z) {
+        return new FastComplex(Math.ceil(z.a), Math.ceil(z.b));
+    }
+
+    /**
+     * returns the product of two complex numbers
+     * @param z complex factor
+     * @param w complex factor
+     * @return complex product
+     */
+    public static FastComplex mult(FastComplex z, FastComplex w) {
+        return new FastComplex(z.a * w.a - z.b * w.b, z.a * w.b + z.b * w.a);
+    }
+
+    /**
+     * returns the product of a complex factor with a real scalar x
+     * @param z complex factor
+     * @param x real scalar
+     * @return complex product
+     */
+    public static FastComplex mult(FastComplex z, double x) {
+        return new FastComplex(x * z.a, x * z.b);
+    }
+
+    /**
+     * returns the quotient of z / w
+     * @param z complex dividend
+     * @param w complex divisor
+     * @return complex quotient
+     */
+    public static FastComplex div(FastComplex z, FastComplex w) {
+        double real = (z.a * w.a + z.b * w.b) / (w.a * w.a + w.b * w.b);
+        double imaginary = (z.b * w.a - z.a * w.b) / (w.a * w.a + w.b * w.b);
+        return new FastComplex(real, imaginary);
+    }
+
+    /**
+     * returns the quotient of z / x
+     * @param z complex dividend
+     * @param x real divisor
+     * @return complex quotient
+     */
+    public static FastComplex div(FastComplex z, double x) {
+        return new FastComplex(z.a / x, z.b / x);
+    }
+
+    /**
+     * returns the quotient of x / z
+     * @param x real dividend
+     * @param z complex divisor
+     * @return complex quotient
+     */
+    public static FastComplex div(double x, FastComplex z) {
+        return new FastComplex(x / z.a, x / z.b);
+    }
+
+    /**
+     * returns the principal complex log to the base e
+     * @param z complex anti-logaritm
+     */
+    public static FastComplex log(FastComplex z) {
+        return new FastComplex(Math.log(z.mag()), z.arg());
+    }
+
+    /**
+     * returns all values of the complex logarithm in a range including the max term <p>
+     * the principal log is term (value) 0
+     * @param z complex anti-logarithm
+     * @param min lowest term
+     * @param max highest term
+     * @return array of complex logarithms
+     */
+    public static FastComplex[] logRange(FastComplex z, int min, int max) {
+        FastComplex[] result = new FastComplex[max - min + 1];
+        double magnitude = Math.log(z.mag());
+        for (int i = min; i <= max; i++) {
+            result[i - min] = new FastComplex(magnitude, z.arg() + (i * 2 * Math.PI));
+        }
+        return result;
+    }
+
+    /**
+     * returns a specific value of the complex logarithm at a term number k <p>
+     * the principal log is term (value) 0
+     * @param z complex anti-logarithm
+     * @param k term number
+     */
+    public static FastComplex log(FastComplex z, int k) {
+        return new FastComplex(Math.log(z.mag()), z.arg() + 2 * k * Math.PI);
+    }
+
+    /**
+     * returns the complex principal logarithm of x
+     * @param x real anti-logarithm
+     * @return complex logarithm
+     */
+    public static FastComplex log(double x) {
+        if (x == 0) throw new IllegalArgumentException();
+        return new FastComplex(Math.log(Math.abs(x)), x > 0 ? 0 : Math.PI);
+    }
+
+    /**
+     * returns the principal logarithm of w to the base of z
+     * @param z complex base
+     * @param w complex anti-logarithm
+     */
+    public static FastComplex log(FastComplex z, FastComplex w) {
+        return div(log(w), log(z));
+    }
+
+    /**
+     * returns the principal logarithm of z to base 10
+     * @param z complex anti-logarithm
+     */
+    public static FastComplex log10(FastComplex z) {
+        return div(log(z), Math.log(10));
+    }
+
+    /**
+     * returns the principal result of complex z raised to real x <p>
+     * since complex exponentiation is multi-valued for non-integers, this returns
+     * the principal result based on normalized θ (-π < θ <= π)
+     * @param z complex base
+     * @param x real exponent
+     */
+    public static FastComplex pow(FastComplex z, double x) {
+        return polar(Math.pow(z.mag(), x), z.arg() * x);
+    }
+
+    /**
+     * returns the principal result of complex z raised to complex w <p>
+     * since complex exponentiation is multi-valued for non-integers, this returns
+     * the principal result based on normalized θ (-π < θ <= π)
+     * @param z complex base
+     * @param w complex exponent
+     */
+    public static FastComplex pow(FastComplex z, FastComplex w) {
+        double mag = z.mag();
+        double arg = z.arg();
+        return (polar(Math.exp(w.a * Math.log(mag) - w.b * arg), w.b * Math.log(mag) + w.a * arg));
+    }
+
+    /**
+     * returns term k of a complex raised to a complex <p>
+     * since complex exponentiation is multi-valued for non-integers, k is the distance of
+     * the term from the principal result (the principal result being k = 0)
+     * @param z complex base
+     * @param w complex exponent
+     * @param k term number
+     */
+    public static FastComplex pow(FastComplex z, FastComplex w, int k) {
+        double arg = z.arg();
+        double mag = z.mag();
+        if (w.isReal() && w.a % 1 == 0) return polar(Math.pow(mag, w.a), arg * w.a);
+        return (
+            polar(
+                Math.exp(w.a * Math.log(mag) - w.b * (arg + 2 * Math.PI * k)),
+                w.b * Math.log(mag) + w.a * (arg + 2 * Math.PI * k)
+            )
+        );
+    }
+
+    /**
+     * returns term k of a complex raised to a real <p>
+     * since complex exponentiation is multi-valued for non-integers, k is the distance of
+     * the term from the principal result (the principal result being k = 0)
+     * @param z complex base
+     * @param x real exponent
+     * @param k term
+     */
+    public static FastComplex pow(FastComplex z, double x, int k) {
+        double mag = z.mag();
+        double arg = z.arg();
+        if (x % 1 == 0) return polar(Math.pow(mag, x), arg * x);
+        return polar(Math.pow(mag, x), (arg + (Math.PI * 2 * k)) * x);
+    }
+
+    /**
+     * returns the principal result of real x raised to complex z
+     * @param x real
+     * @param z complex
+     * @return
+     */
+    public static FastComplex pow(double x, FastComplex z) {
+        return new FastComplex(Math.pow(x, z.a) * Math.cos(z.b), Math.pow(x, z.a) * Math.sin(z.b));
+    }
+
+    /**
+     * returns the principal result of e raised to the power of the complex z
+     * @param z complex exponent
+     */
+    public static FastComplex exp(FastComplex z) {
+        return new FastComplex(Math.exp(z.a) * Math.cos(z.b), Math.exp(z.a) * Math.sin(z.b));
+    }
+
+    /**
+     * returns the principal square root of a complex z
+     * @param z complex radicand
+     */
+    public static FastComplex sqrt(FastComplex z) {
+        return pow(z, 0.5);
+    }
+
+    /**
+     * returns the principal square of a complex z
+     * @param z complex base
+     */
+    public static FastComplex sqr(FastComplex z) {
+        return pow(z, 2);
+    }
+
+    /**
+     * returns the principal n-th root of a complex
+     * since complex roots are multi-valued, this returns
+     * the principal result based on normalized θ (-π < θ <= π)
+     * @param z complex radicand
+     * @param n real degree
+     */
+    public static FastComplex nRoot(FastComplex z, double n) {
+        if (n == 0) throw new IllegalArgumentException("trying to take 0th root");
+        return pow(z, 1 / n);
+    }
+
+    /**
+     * returns term k of the n-th complex root <p>
+     * since complex roots are multi-valued, k is the distance of
+     * the term from the principal result (the principal result being k = 0)
+     * @param z complex radicand
+     * @param n real degree
+     */
+    public static FastComplex nRoot(FastComplex z, double n, int k) {
+        if (n == 0) throw new IllegalArgumentException("trying to take 0th root");
+        return pow(z, 1 / n, k);
+    }
+
+    /**
+     * returns term k of the n-th complex root <p>
+     * since complex roots are multi-valued, k is the distance of
+     * the term from the principal result (the principal result being k = 0)
+     * @param z complex radicand
+     * @param n complex degree
+     */
+    public static FastComplex nRoot(FastComplex z, FastComplex w, int k) {
+        return pow(z, div(1, w), k);
+    }
+
+    /**
+     * returns the sine of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex sin(FastComplex z) {
+        return new FastComplex(Math.sin(z.a) * Math.cosh(z.b), Math.cos(z.a) * Math.sinh(z.b));
+    }
+
+    /**
+     * returns the cosine of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex cos(FastComplex z) {
+        return sub(Math.cos(z.a) * Math.cosh(z.b), new FastComplex(0, Math.sin(z.a) * Math.sinh(z.b)));
+    }
+
+    /**
+     * returns the tangent of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex tan(FastComplex z) {
+        double tanA = Math.tan(z.a);
+        double tanhB = Math.tanh(z.b);
+        return div(new FastComplex(tanA, tanhB), sub(1, new FastComplex(0, tanA * tanhB)));
+    }
+
+    /**
+     * returns the cotangent of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex cot(FastComplex z) {
+        double tanA = Math.tan(z.a);
+        double tanhA = Math.tanh(z.b);
+        return invert(div(new FastComplex(1, (1 / tanA) * (1 / tanhA)), new FastComplex(1 / tanA, -(1 / tanhA))));
+    }
+
+    /**
+     * returns the secant of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex sec(FastComplex z) {
+        return div(1, cos(z));
+    }
+
+    /**
+     * returns the cosecant of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex csc(FastComplex z) {
+        return div(1, sin(z));
+    }
+
+    /**
+     * returns the hyperbolic sine of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex sinh(FastComplex z) {
+        return new FastComplex(Math.sinh(z.a) * Math.cos(z.b), Math.cosh(z.a) * Math.sin(z.b));
+    }
+
+    /**
+     * returns the hyperbolic cosine of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex cosh(FastComplex z) {
+        return new FastComplex(Math.cosh(z.a) * Math.cos(z.b), Math.sinh(z.a) * Math.sin(z.b));
+    }
+
+    /**
+     * returns the hyperbolic tangent of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex tanh(FastComplex z) {
+        return div(sinh(z), cosh(z));
+    }
+
+    /**
+     * returns the hyperbolic cotangent of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex coth(FastComplex z) {
+        return div(cosh(z), sinh(z));
+    }
+
+    /**
+     * returns the hyperbolic secant of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex sech(FastComplex z) {
+        return div(1, cosh(z));
+    }
+
+    /**
+     * returns the hyperbolic cosecant of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex csch(FastComplex z) {
+        return div(1, sinh(z));
+    }
+
+    /**
+     * returns the inverse sine of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex asin(FastComplex z) {
+        return mult(new FastComplex(0, -1), log(add(mult(i(), z), sqrt(sub(1, sqr(z))))));
+    }
+
+    /**
+     * returns the inverse cosine of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex acos(FastComplex z) {
+        return mult(new FastComplex(0, -1), log(add(z, sqrt(sub(sqr(z), 1)))));
+    }
+
+    /**
+     * returns the inverse tangent of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex atan(FastComplex z) {
+        return mult(new FastComplex(0, 0.5), log(div(add(i(), z), sub(i(), z))));
+    }
+
+    /**
+     * returns the inverse cotangent of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex acot(FastComplex z) {
+        return div(mult(new FastComplex(0, 0.5), log(sub(z, i()))), add(i(), z));
+    }
+
+    /**
+     * returns the inverse secant of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex asec(FastComplex z) {
+        return acos(div(1, z));
+    }
+
+    /**
+     * returns the inverse cosecant of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex acsc(FastComplex z) {
+        return asin(div(1, z));
+    }
+
+    /**
+     * returns the inverse hyperbolic sine of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex asinh(FastComplex z) {
+        return log(add(z, sqrt(add(sqr(z), 1))));
+    }
+
+    /**
+     * returns the inverse hyperbolic cotsine of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex acosh(FastComplex z) {
+        return log(add(z, sqrt(sub(sqr(z), 1))));
+    }
+
+    /**
+     * returns the inverse hyperbolic tangent of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex atanh(FastComplex z) {
+        return mult(new FastComplex(0, -1), atan(mult(i(), z)));
+    }
+
+    /**
+     * returns the inverse hyperbolic cotangent of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex acoth(FastComplex z) {
+        return atanh(div(1, z));
+    }
+
+    /**
+     * returns the inverse hyperbolic secant of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex asech(FastComplex z) {
+        return acosh(div(1, z));
+    }
+
+    /**
+     * returns the inverse hyperbolic cosecant of a complex z
+     * @param z complex argument
+     */
+    public static FastComplex acsch(FastComplex z) {
+        return asinh(div(1, z));
+    }
+
+    /**
+     * returns the conjugate of the number (inverse of b)
+     * @param z complex argument
+     * @return conjugate
+     */
+    public static FastComplex conjugate(FastComplex z) {
+        return new FastComplex(z.a, z.b == 0 ? 0 : -z.b);
+    }
+
+    /**
+     * returns a string in cartesian (square) form <p>
+     * truncates decimals for whole numbers and omits empty values <p>
+     */
+    @Override
+    public String toString() {
+        double a = this.a;
+        double b = this.b;
+        if (Math.abs(this.a - Math.round(this.a)) < 1e-10) a = Math.round(a);
+        if (Math.abs(this.b - Math.round(this.b)) < 1e-10) b = Math.round(b);
+        if (b == 0) return truncateWhole(a);
+        if (a == 0) return (b < 0 ? "-" : "") + (Math.abs(b) == 1 ? "" : truncateWhole(Math.abs(b))) + "i";
+
+        if (b < 0) return truncateWhole(a) + " - " + truncateWhole(Math.abs(b)) + "i";
+        return truncateWhole(a) + " + " + truncateWhole(Math.abs(b)) + "i";
+    }
+
+    /**
+     * returns a string in normalized polar form <p>
+     * truncates decimals for whole numbers and omits empty values <p>
+     */
+    public String toStringPolar() {
+        return full().toStringPolar();
+    }
+
+    /**
+     * truncates decimals from whole numbers and returns as string
+     * @param x double
+     * @return String
+     */
+    private String truncateWhole(double x) {
+        return x % 1 == 0 ? String.valueOf((long) x) : String.valueOf(x);
+    }
+}
