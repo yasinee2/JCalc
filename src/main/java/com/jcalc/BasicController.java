@@ -2,6 +2,7 @@ package com.jcalc;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 
 public class BasicController {
 
@@ -31,14 +32,26 @@ public class BasicController {
 
     @FXML
     private Button CommaButton = new Button();
+    @FXML
+    private Button AddButton = new Button();
+    @FXML
+    private Button SubtractButton = new Button();
+    @FXML
+    private Button MultiplyButton = new Button();
+    @FXML
+    private Button DivideButton = new Button();
+
+    @FXML
+    protected TextField NumbField;
+
+    protected static BasicController instance;
 
     @FXML
     private Button[] BtnArray;
 
-    private int btnIndex = 0;
-
     @FXML
     public void initialize() {
+        instance = this;
         BtnArray = new Button[]{
             NumbButton0,
             NumbButton1,
@@ -51,17 +64,17 @@ public class BasicController {
             NumbButton8,
             NumbButton9,
             EqualsButton,
-            CommaButton
+            CommaButton,
+            AddButton,
+            SubtractButton,
+            MultiplyButton,
+            DivideButton
         };
 
-        int index = 0;
         for (Button btn : BtnArray) {
-            int i = index;
             btn.setOnAction(e -> {
-                App.inputHandler(i);
-                System.out.println("Controller " + i);
+                App.inputHandler(btn);
             });
-            index++;
         }
     }
 

@@ -8,13 +8,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="778.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jcalc.BasicController">
+<VBox alignment="CENTER" prefHeight="778.0" prefWidth="664.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jcalc.BasicController">
    <children>
       <Label prefHeight="69.0" prefWidth="300.0" text="Basic Calculator">
          <font>
             <Font size="40.0" />
          </font></Label>
-      <TextField fx:id="NumbField" alignment="CENTER_RIGHT" editable="false" maxWidth="-Infinity" prefHeight="45.0" prefWidth="300.0" promptText="0">
+      <TextField fx:id="NumbField" alignment="CENTER_RIGHT" editable="true" maxWidth="-Infinity" prefHeight="62.0" prefWidth="400.0" text="333333333333333333333">
          <font>
             <Font size="30.0" />
          </font>
@@ -32,6 +32,11 @@
             <font>
                <Font size="47.0" />
             </font></Button>
+         <Button fx:id="AddButton" layoutX="172.0" layoutY="10.0" prefHeight="100.0" prefWidth="100.0" text="+">
+            <font>
+               <Font size="47.0" />
+            </font>
+         </Button>
       </HBox>
       <HBox alignment="CENTER">
          <Button fx:id="NumbButton4" prefHeight="100.0" prefWidth="100.0" text="4">
@@ -46,6 +51,11 @@
             <font>
                <Font size="47.0" />
             </font></Button>
+         <Button fx:id="SubtractButton" layoutX="372.0" layoutY="10.0" prefHeight="100.0" prefWidth="100.0" text="-">
+            <font>
+               <Font size="47.0" />
+            </font>
+         </Button>
       </HBox>
       <HBox alignment="CENTER">
          <Button fx:id="NumbButton7" prefHeight="100.0" prefWidth="100.0" text="7">
@@ -60,6 +70,11 @@
             <font>
                <Font size="47.0" />
             </font></Button>
+         <Button fx:id="MultiplyButton" layoutX="372.0" layoutY="10.0" prefHeight="100.0" prefWidth="100.0" text="*">
+            <font>
+               <Font size="47.0" />
+            </font>
+         </Button>
       </HBox>
       <HBox alignment="CENTER" layoutX="30.0" layoutY="276.0">
          <children>
@@ -75,6 +90,11 @@
                <font>
                   <Font size="47.0" />
                </font></Button>
+            <Button fx:id="DivideButton" layoutX="372.0" layoutY="10.0" prefHeight="100.0" prefWidth="100.0" text="/">
+               <font>
+                  <Font size="47.0" />
+               </font>
+            </Button>
          </children>
       </HBox>
    </children>
