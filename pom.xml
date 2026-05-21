@@ -48,7 +48,7 @@
                         <!-- Usage: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.jcalc.App</mainClass>
+                            <mainClass>com.jcalc.GuiApp</mainClass>
                         </configuration>
                     </execution>
                 </executions>

@@ -52,8 +52,7 @@ public class App {
             "arccosh(i)", // 0.8813735870195430 + 1.5707963267948966i
             "arctanh(i)", // 1.5707963267948966i... no: iπ/4
             "arcsinh(ii)",
-            "sqrt0",
-        };
+            "sqrt0",};
 
         for (String expression : expressions) {
             System.out.println(new ComplexEvaluator(expression).eval());
@@ -61,13 +60,11 @@ public class App {
 
         // var expression1 = new ComplexEvaluator("((2-i)^(3+2i))/(1+i)^2^(1/3)");
         // var expression2 = new Evaluator("((2-i)^(3+2i))/(1+i)^2^(1/3)");
-
         // long startingTime = System.nanoTime();
         // for (int i = 0; i < 1000000; i++) {
         //     expression1.eval();
         // }
         // System.out.println((System.nanoTime() - startingTime) / 1000000 + "ms");
-
         // startingTime = System.nanoTime();
         // for (int i = 0; i < 1000000; i++) {
         //     expression2.eval('i', 5);
