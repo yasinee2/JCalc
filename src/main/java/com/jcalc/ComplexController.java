@@ -146,10 +146,12 @@ public class ComplexController {
             });
         }
         NumbField.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
-            if (!key.getCharacter().matches("[0-9+\\-*/.()]")) {
+            String character = key.getCharacter();
+            if (!character.matches("[0-9+\\-*/.()]") && key.getCode() != KeyCode.ENTER) {
+                //[0-9+\\-*/.^()iA-Za-z]
                 key.consume();
             }
-            if (key.getCode() == KeyCode.ENTER || key.getCharacter().matches("=")) {
+            if (key.getCode() == KeyCode.ENTER || character.matches("=")) {
                 if (NumbField.getText().length() > 0) {
                     GuiApp.ComplexinputHandler(EqualsButton);
                 }

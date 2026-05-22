@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 /**
@@ -58,7 +59,6 @@ public class GuiApp extends Application {
                 }
             }
             default -> {
-                System.out.println("lol");
                 BasicController.instance.NumbField.appendText(button.getText());
             }
         }
@@ -68,15 +68,56 @@ public class GuiApp extends Application {
         ComplexController.instance.NumbField.requestFocus();
         switch (button.getText()) {
             case "=" ->
-                ComplexController.instance.NumbField.setText(calculate());
+                ComplexController.instance.NumbField.setText(Complexcalculate());
 
             case "AC" ->
                 ComplexController.instance.NumbField.setText("");
             case "C" -> {
-                if (ComplexController.instance.NumbField.getText().length() > 0) {
-                    ComplexController.instance.NumbField.setText(ComplexController.instance.NumbField.getText().substring(0, ComplexController.instance.NumbField.getText().length() - 1));
-                }
+                Delete(ComplexController.instance.NumbField);
             }
+            case "sin" -> {
+                ComplexController.instance.NumbField.appendText(button.getText() + "(");
+            }
+            case "cos" -> {
+                ComplexController.instance.NumbField.appendText(button.getText() + "(");
+            }
+            case "tan" -> {
+                ComplexController.instance.NumbField.appendText(button.getText() + "(");
+            }
+            case "sinh" -> {
+                ComplexController.instance.NumbField.appendText(button.getText() + "(");
+            }
+            case "cosh" -> {
+                ComplexController.instance.NumbField.appendText(button.getText() + "(");
+            }
+            case "tanh" -> {
+                ComplexController.instance.NumbField.appendText(button.getText() + "(");
+            }
+            case "arcsin" -> {
+                ComplexController.instance.NumbField.appendText(button.getText() + "(");
+            }
+            case "arccos" -> {
+                ComplexController.instance.NumbField.appendText(button.getText() + "(");
+            }
+            case "arctan" -> {
+                ComplexController.instance.NumbField.appendText(button.getText() + "(");
+            }
+            case "arcsinh" -> {
+                ComplexController.instance.NumbField.appendText(button.getText() + "(");
+            }
+            case "arccosh" -> {
+                ComplexController.instance.NumbField.appendText(button.getText() + "(");
+            }
+            case "arctanh" -> {
+                ComplexController.instance.NumbField.appendText(button.getText() + "(");
+            }
+            case "sqrt" -> {
+                ComplexController.instance.NumbField.appendText(button.getText() + "(");
+            }
+            case "log" -> {
+                ComplexController.instance.NumbField.appendText(button.getText() + "(");
+            }
+
             case "Basic" -> {
                 try {
                     setRoot("BasicCalcUI");
@@ -85,7 +126,6 @@ public class GuiApp extends Application {
                 }
             }
             default -> {
-                System.out.println("lol");
                 ComplexController.instance.NumbField.appendText(button.getText());
             }
         }
@@ -103,7 +143,7 @@ public class GuiApp extends Application {
     }
 
     protected static String Complexcalculate() {
-        System.out.println("Calculating...");
+        System.out.println("ComplexCalculating...");
         String expression = ComplexController.instance.NumbField.getText();
         System.out.println(expression);
         try {
@@ -111,6 +151,15 @@ public class GuiApp extends Application {
         } catch (Error e) {
             System.err.println(String.valueOf(e));
             return "Error";
+        }
+    }
+
+    private static void Delete(TextField numbField) {
+        if (numbField.getText().length() > 0) {
+            numbField.setText(numbField.getText().substring(0, numbField.getText().length() - 1));
+            while (!numbField.getText().substring(0, numbField.getText().length() - 1).matches("[0-9()]")) {
+                numbField.setText(numbField.getText().substring(0, numbField.getText().length() - 1));
+            }
         }
     }
 }
