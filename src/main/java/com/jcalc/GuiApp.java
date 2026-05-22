@@ -64,10 +64,9 @@ public class GuiApp extends Application {
                 }
                 BasicController.instance.NumbField.appendText(button.getText());
             }
+            // 67 67 67
         }
-
     }
-// 67 67 67
 
     protected static void ComplexinputHandler(Button button) {
         ComplexController.instance.NumbField.requestFocus();
@@ -163,13 +162,27 @@ public class GuiApp extends Application {
     }
 
     protected static void Delete(TextField numbField) {
-        while (numbField.getText().length() > 0) {
-            String last = String.valueOf(numbField.getText().charAt(numbField.getText().length() - 1));
-            if (!last.matches("[0-9()]")) {
-                numbField.setText(numbField.getText().substring(0, numbField.getText().length() - 1));
-            } else {
-                break;
+        String text = numbField.getText();
+        if (text.isEmpty()) {
+            return;
+        }
+
+        String[] functions = {
+            "arcsinh(", "arccosh(", "arctanh(",
+            "arcsin(", "arccos(", "arctan(",
+            "sinh(", "cosh(", "tanh(",
+            "sqrt(", "log(",
+            "sin(", "cos(", "tan("
+        };
+
+        for (String func : functions) {
+            if (text.endsWith(func + "(") || text.endsWith(func)) {
+                numbField.setText(text.substring(0, text.length() - func.length()));
+                numbField.positionCaret(numbField.getLength());
+                return;
             }
         }
+        numbField.setText(text.substring(0, text.length() - 1));
+        numbField.positionCaret(numbField.getLength());
     }
 }
