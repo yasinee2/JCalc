@@ -152,6 +152,9 @@ public class ComplexController {
                     GuiApp.ComplexinputHandler(EqualsButton);
                 }
             }
+            if (NumbField.getText().matches("Error")) {
+                NumbField.setText("");
+            }
         });
 
         NumbField.textProperty().addListener((observable, oldValue, newValue) -> {

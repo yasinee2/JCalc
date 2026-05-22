@@ -65,8 +65,6 @@ public class BasicController {
 
     @FXML
     private Button[] BtnArray;
-    private String LastText = "";
-    private String CurrentText = "";
 
     @FXML
     public void initialize() {
@@ -101,6 +99,9 @@ public class BasicController {
             });
         }
         NumbField.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
+            if (NumbField.getText().matches("Error")) {
+                NumbField.setText("");
+            }
             if (key.getCode() == KeyCode.ENTER) {
                 if (NumbField.getText().length() > 0) {
                     GuiApp.inputHandler(EqualsButton);
@@ -108,6 +109,7 @@ public class BasicController {
             }
         });
         NumbField.textProperty().addListener((observable, oldValue, newValue) -> {
+
             if (newValue.contains(String.valueOf("="))) {
                 String TextWithoutEquals = NumbField.getText().replace("=", "");
                 NumbField.setText(TextWithoutEquals);

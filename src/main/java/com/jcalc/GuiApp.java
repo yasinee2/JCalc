@@ -59,6 +59,9 @@ public class GuiApp extends Application {
                 }
             }
             default -> {
+                if (BasicController.instance.NumbField.getText().matches("Error")) {
+                    BasicController.instance.NumbField.setText("");
+                }
                 BasicController.instance.NumbField.appendText(button.getText());
             }
         }
@@ -128,6 +131,9 @@ public class GuiApp extends Application {
                 }
             }
             default -> {
+                if (ComplexController.instance.NumbField.getText().matches("Error")) {
+                    ComplexController.instance.NumbField.setText("");
+                }
                 ComplexController.instance.NumbField.appendText(button.getText());
             }
         }
@@ -157,10 +163,12 @@ public class GuiApp extends Application {
     }
 
     protected static void Delete(TextField numbField) {
-        if (numbField.getText().length() > 0) {
-            //numbField.setText(numbField.getText().substring(0, numbField.getText().length() - 1));
-            while (!numbField.getText().substring(0, numbField.getText().length() - 1).matches("[0-9()]")) {
+        while (numbField.getText().length() > 0) {
+            String last = String.valueOf(numbField.getText().charAt(numbField.getText().length() - 1));
+            if (!last.matches("[0-9()]")) {
                 numbField.setText(numbField.getText().substring(0, numbField.getText().length() - 1));
+            } else {
+                break;
             }
         }
     }
