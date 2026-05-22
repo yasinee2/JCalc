@@ -62,7 +62,9 @@ public class GuiApp extends Application {
                 BasicController.instance.NumbField.appendText(button.getText());
             }
         }
+
     }
+// 67 67 67
 
     protected static void ComplexinputHandler(Button button) {
         ComplexController.instance.NumbField.requestFocus();
@@ -136,8 +138,8 @@ public class GuiApp extends Application {
         String expression = BasicController.instance.NumbField.getText();
         try {
             return String.valueOf(new ComplexEvaluator(expression).eval());
-        } catch (Error e) {
-            System.err.println(String.valueOf(e));
+        } catch (Exception e) {
+            System.err.println(e);
             return "Error";
         }
     }
@@ -148,15 +150,15 @@ public class GuiApp extends Application {
         System.out.println(expression);
         try {
             return String.valueOf(new ComplexEvaluator(expression).eval());
-        } catch (Error e) {
-            System.err.println(String.valueOf(e));
+        } catch (Exception e) {
+            System.err.println(e);
             return "Error";
         }
     }
 
-    private static void Delete(TextField numbField) {
+    protected static void Delete(TextField numbField) {
         if (numbField.getText().length() > 0) {
-            numbField.setText(numbField.getText().substring(0, numbField.getText().length() - 1));
+            //numbField.setText(numbField.getText().substring(0, numbField.getText().length() - 1));
             while (!numbField.getText().substring(0, numbField.getText().length() - 1).matches("[0-9()]")) {
                 numbField.setText(numbField.getText().substring(0, numbField.getText().length() - 1));
             }

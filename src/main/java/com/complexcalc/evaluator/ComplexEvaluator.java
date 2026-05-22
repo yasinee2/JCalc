@@ -1,8 +1,9 @@
 package com.complexcalc.evaluator;
 
+import java.util.List;
+
 import com.complexcalc.evaluator.Lexer.Token;
 import com.complexcalc.evaluator.Lexer.TokenType;
-import java.util.List;
 
 public class ComplexEvaluator {
 
@@ -23,14 +24,14 @@ public class ComplexEvaluator {
     }
 
     public FastComplex eval(
-        char var1,
-        FastComplex var1val,
-        char var2,
-        FastComplex var2val,
-        char var3,
-        FastComplex var3val,
-        char var4,
-        FastComplex var4val
+            char var1,
+            FastComplex var1val,
+            char var2,
+            FastComplex var2val,
+            char var3,
+            FastComplex var3val,
+            char var4,
+            FastComplex var4val
     ) {
         this.var1 = var1;
         this.var1val = var1val;
@@ -59,12 +60,12 @@ public class ComplexEvaluator {
     }
 
     public FastComplex eval(
-        char var1,
-        FastComplex var1val,
-        char var2,
-        FastComplex var2val,
-        char var3,
-        FastComplex var3val
+            char var1,
+            FastComplex var1val,
+            char var2,
+            FastComplex var2val,
+            char var3,
+            FastComplex var3val
     ) {
         return eval(var1, var1val, var2, var2val, var3, var3val, (char) 0, null);
     }
@@ -169,7 +170,6 @@ public class ComplexEvaluator {
         //             args.add(depth1());
         //         }
         //         expect(TokenType.RPAR);
-
         //         return switch (token) {
         //             case LOG -> {
         //                 if (args.size() == 1) yield Math.log(args.get(0));
@@ -193,49 +193,86 @@ public class ComplexEvaluator {
         //         };
         //     }
         // }
-
         for (TokenType token : Lexer.wordFunctions.values()) {
             if (check(token)) {
                 consume();
                 boolean par = check(TokenType.LPAR);
-                if (par) consume();
+                if (par) {
+                    consume();
+                }
                 FastComplex result = par ? depth1() : depth5();
-                if (par) expect(TokenType.RPAR);
+                if (par) {
+                    expect(TokenType.RPAR);
+                }
                 return switch (token) {
-                    case LOG10 -> FastComplex.log10(result);
-                    case FLOOR -> FastComplex.floor(result);
-                    case CEIL -> FastComplex.ceil(result);
-                    case ROUND -> FastComplex.round(result);
-                    case SINH -> FastComplex.sinh(result);
-                    case COSH -> FastComplex.cosh(result);
-                    case TANH -> FastComplex.tanh(result);
-                    case COTH -> FastComplex.coth(result);
-                    case SECH -> FastComplex.sech(result);
-                    case CSCH -> FastComplex.csch(result);
-                    case ASIN -> FastComplex.asin(result);
-                    case ACOS -> FastComplex.acos(result);
-                    case ACOT -> FastComplex.acot(result);
-                    case ASEC -> FastComplex.asec(result);
-                    case ACSC -> FastComplex.acsc(result);
-                    case ATAN -> FastComplex.atan(result);
-                    case ASINH -> FastComplex.asinh(result);
-                    case ACOSH -> FastComplex.acosh(result);
-                    case ATANH -> FastComplex.atanh(result);
-                    case ACOTH -> FastComplex.acoth(result);
-                    case ASECH -> FastComplex.asech(result);
-                    case ACSCH -> FastComplex.acsch(result);
-                    case CONJ -> FastComplex.conjugate(result);
-                    case SQRT -> FastComplex.sqrt(result);
-                    case ABS -> new FastComplex(result.mag(), 0);
-                    case EXP -> FastComplex.exp(result);
-                    case SIN -> FastComplex.sin(result);
-                    case COS -> FastComplex.cos(result);
-                    case TAN -> FastComplex.tan(result);
-                    case COT -> FastComplex.cot(result);
-                    case SEC -> FastComplex.sec(result);
-                    case CSC -> FastComplex.csc(result);
-                    case LOG -> FastComplex.log(result);
-                    default -> throw new IllegalArgumentException("unexpected word function: got " + peek().type());
+                    case LOG10 ->
+                        FastComplex.log10(result);
+                    case FLOOR ->
+                        FastComplex.floor(result);
+                    case CEIL ->
+                        FastComplex.ceil(result);
+                    case ROUND ->
+                        FastComplex.round(result);
+                    case SINH ->
+                        FastComplex.sinh(result);
+                    case COSH ->
+                        FastComplex.cosh(result);
+                    case TANH ->
+                        FastComplex.tanh(result);
+                    case COTH ->
+                        FastComplex.coth(result);
+                    case SECH ->
+                        FastComplex.sech(result);
+                    case CSCH ->
+                        FastComplex.csch(result);
+                    case ASIN ->
+                        FastComplex.asin(result);
+                    case ACOS ->
+                        FastComplex.acos(result);
+                    case ACOT ->
+                        FastComplex.acot(result);
+                    case ASEC ->
+                        FastComplex.asec(result);
+                    case ACSC ->
+                        FastComplex.acsc(result);
+                    case ATAN ->
+                        FastComplex.atan(result);
+                    case ASINH ->
+                        FastComplex.asinh(result);
+                    case ACOSH ->
+                        FastComplex.acosh(result);
+                    case ATANH ->
+                        FastComplex.atanh(result);
+                    case ACOTH ->
+                        FastComplex.acoth(result);
+                    case ASECH ->
+                        FastComplex.asech(result);
+                    case ACSCH ->
+                        FastComplex.acsch(result);
+                    case CONJ ->
+                        FastComplex.conjugate(result);
+                    case SQRT ->
+                        FastComplex.sqrt(result);
+                    case ABS ->
+                        new FastComplex(result.mag(), 0);
+                    case EXP ->
+                        FastComplex.exp(result);
+                    case SIN ->
+                        FastComplex.sin(result);
+                    case COS ->
+                        FastComplex.cos(result);
+                    case TAN ->
+                        FastComplex.tan(result);
+                    case COT ->
+                        FastComplex.cot(result);
+                    case SEC ->
+                        FastComplex.sec(result);
+                    case CSC ->
+                        FastComplex.csc(result);
+                    case LOG ->
+                        FastComplex.log(result);
+                    default ->
+                        throw new IllegalArgumentException("unexpected word function: got " + peek().type());
                 };
             }
         }
@@ -244,20 +281,31 @@ public class ComplexEvaluator {
 
     /**
      * throws exceptions if there are too many or too few arguments
+     *
      * @param amount the argument amount
      * @param min the minimum value to not throw an exception
      * @param max the max value to not throw an exception
      */
     private static void argException(int amount, int min, int max) {
-        if (amount < min) throw new IllegalArgumentException("too few arguments provided");
-        if (amount > max) throw new IllegalArgumentException("too many arguments provided");
+        if (amount < min) {
+            throw new IllegalArgumentException("too few arguments provided");
+        }
+        if (amount > max) {
+            throw new IllegalArgumentException("too many arguments provided");
+        }
     }
 
     private Token peek() {
+        if (pos >= tokens.size()) {
+            throw new IllegalStateException("unexpected end of expression");
+        }
         return tokens.get(pos);
     }
 
     private Token consume() {
+        if (pos >= tokens.size()) {
+            throw new IllegalStateException("unexpected end of expression");
+        }
         return tokens.get(pos++);
     }
 
@@ -266,7 +314,9 @@ public class ComplexEvaluator {
     }
 
     private void expect(TokenType t) {
-        if (!check(t)) throw new IllegalArgumentException("missing " + t);
+        if (!check(t)) {
+            throw new IllegalArgumentException("missing " + t);
+        }
         consume();
     }
 }

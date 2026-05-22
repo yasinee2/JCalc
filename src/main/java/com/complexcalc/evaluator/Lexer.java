@@ -120,12 +120,14 @@ public class Lexer {
     }
 
     static Map<String, TokenType> multipleArguments = new LinkedHashMap<>(
-        Map.of("atan2", TokenType.ATAN2, "hypot", TokenType.HYPOT, "log", TokenType.LOG, "root", TokenType.ROOT)
+            Map.of("atan2", TokenType.ATAN2, "hypot", TokenType.HYPOT, "log", TokenType.LOG, "root", TokenType.ROOT)
     );
 
     static Map<String, TokenType> complexOperations = new LinkedHashMap<>(Map.of("conj", TokenType.CONJ));
 
-    record Token(TokenType type, double value) {}
+    record Token(TokenType type, double value) {
+
+    }
 
     public static List<Token> tokenize(String s) {
         List<Token> tokens = new ArrayList<>();
@@ -134,10 +136,14 @@ public class Lexer {
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
 
-            if (c == ' ') continue;
+            if (c == ' ') {
+                continue;
+            }
 
             if (Character.isDigit(c) || c == '.') {
-                if (digitStart == -1) digitStart = i;
+                if (digitStart == -1) {
+                    digitStart = i;
+                }
                 continue;
             }
 
@@ -147,24 +153,32 @@ public class Lexer {
             }
 
             switch (c) {
-                case '+' -> tokens.add(new Token(TokenType.ADD, 1));
+                case '+' ->
+                    tokens.add(new Token(TokenType.ADD, 1));
                 case '-' -> {
-                    TokenType lastToken;
-                    if (i == 0) tokens.add(new Token(TokenType.UN_SUB, 3));
-                    else {
-                        lastToken = tokens.getLast().type;
-                        if (
-                            lastToken != TokenType.NUM && lastToken != TokenType.VAR && lastToken != TokenType.RPAR
-                        ) tokens.add(new Token(TokenType.UN_SUB, 3));
-                        else tokens.add(new Token(TokenType.SUB, 1));
+                    if (tokens.isEmpty()) {
+                        tokens.add(new Token(TokenType.UN_SUB, 3));
+                    } else {
+                        TokenType lastToken = tokens.get(tokens.size() - 1).type();
+                        if (lastToken != TokenType.NUM && lastToken != TokenType.VAR && lastToken != TokenType.RPAR) {
+                            tokens.add(new Token(TokenType.UN_SUB, 3)); 
+                        }else {
+                            tokens.add(new Token(TokenType.SUB, 1));
+                        }
                     }
                 }
-                case '*' -> tokens.add(new Token(TokenType.MULT, 2));
-                case '/' -> tokens.add(new Token(TokenType.DIV, 2));
-                case '^' -> tokens.add(new Token(TokenType.POW, 4));
-                case '(' -> tokens.add(new Token(TokenType.LPAR, 5));
-                case ')' -> tokens.add(new Token(TokenType.RPAR, 5));
-                case ',' -> tokens.add(new Token(TokenType.COMMA, 0));
+                case '*' ->
+                    tokens.add(new Token(TokenType.MULT, 2));
+                case '/' ->
+                    tokens.add(new Token(TokenType.DIV, 2));
+                case '^' ->
+                    tokens.add(new Token(TokenType.POW, 4));
+                case '(' ->
+                    tokens.add(new Token(TokenType.LPAR, 5));
+                case ')' ->
+                    tokens.add(new Token(TokenType.RPAR, 5));
+                case ',' ->
+                    tokens.add(new Token(TokenType.COMMA, 0));
                 default -> {
                     if (Character.isAlphabetic(c)) {
                         boolean wordFound = false;
@@ -184,33 +198,39 @@ public class Lexer {
                                 break;
                             }
                         }
-                        if (!wordFound) tokens.add(new Token(TokenType.VAR, c));
-                    } else throw new IllegalArgumentException();
+                        if (!wordFound) {
+                            tokens.add(new Token(TokenType.VAR, c));
+                        }
+                    } else {
+                        throw new IllegalArgumentException();
+                    }
                 }
             }
         }
-        if (digitStart != -1) tokens.add(new Token(TokenType.NUM, Double.parseDouble(s.substring(digitStart))));
+        if (digitStart != -1) {
+            tokens.add(new Token(TokenType.NUM, Double.parseDouble(s.substring(digitStart))));
+        }
 
         List<TokenType> allowedToEnd = new ArrayList<>(
-            List.of(
-                TokenType.ADD,
-                TokenType.DIV,
-                TokenType.POW,
-                TokenType.MULT,
-                TokenType.SUB,
-                TokenType.UN_SUB,
-                TokenType.COMMA
-            )
+                List.of(
+                        TokenType.ADD,
+                        TokenType.DIV,
+                        TokenType.POW,
+                        TokenType.MULT,
+                        TokenType.SUB,
+                        TokenType.UN_SUB,
+                        TokenType.COMMA
+                )
         );
 
         for (int i = 0; i < tokens.size() - 1; i++) {
             if (!allowedToEnd.contains(tokens.get(i).type) && !allowedToEnd.contains(tokens.get(i + 1).type)) {
-                if (
-                    wordFunctions.containsValue(tokens.get(i).type) ||
-                    multipleArguments.containsValue(tokens.get(i).type) ||
-                    TokenType.LPAR == tokens.get(i).type ||
-                    TokenType.RPAR == tokens.get(i + 1).type
-                ) continue;
+                if (wordFunctions.containsValue(tokens.get(i).type)
+                        || multipleArguments.containsValue(tokens.get(i).type)
+                        || TokenType.LPAR == tokens.get(i).type
+                        || TokenType.RPAR == tokens.get(i + 1).type) {
+                    continue;
+                }
                 tokens.add(i + 1, new Token(TokenType.MULT, 2));
                 i++;
             }

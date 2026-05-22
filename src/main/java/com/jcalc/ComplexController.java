@@ -1,5 +1,6 @@
 package com.jcalc;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -146,15 +147,22 @@ public class ComplexController {
             });
         }
         NumbField.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
-            String character = key.getCharacter();
-            if (!character.matches("[0-9+\\-*/.()]") && key.getCode() != KeyCode.ENTER) {
-                //[0-9+\\-*/.^()iA-Za-z]
-                key.consume();
-            }
-            if (key.getCode() == KeyCode.ENTER || character.matches("=")) {
+            if (key.getCode() == KeyCode.ENTER) {
                 if (NumbField.getText().length() > 0) {
                     GuiApp.ComplexinputHandler(EqualsButton);
                 }
+            }
+        });
+
+        NumbField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.contains(String.valueOf("="))) {
+                String TextWithoutEquals = NumbField.getText().replace("=", "");
+                NumbField.setText(TextWithoutEquals);
+                Platform.runLater(() -> {
+                    GuiApp.ComplexinputHandler(EqualsButton);
+                });
+                NumbField.positionCaret(NumbField.getLength());
+
             }
         });
     }
