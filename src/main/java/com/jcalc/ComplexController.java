@@ -6,7 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-public class BasicController {
+public class ComplexController {
 
     @FXML
     private Button NumbButton1 = new Button();
@@ -56,11 +56,43 @@ public class BasicController {
 
     @FXML
     private Button LParenButton = new Button();
+    @FXML
+    private Button iButton = new Button();
+    @FXML
+    private Button PowButton = new Button();
+    @FXML
+    private Button sinButton = new Button();
+    @FXML
+    private Button cosButton = new Button();
+    @FXML
+    private Button tanButton = new Button();
+    @FXML
+    private Button sinhButton = new Button();
+    @FXML
+    private Button coshButton = new Button();
+    @FXML
+    private Button tanhButton = new Button();
+    @FXML
+    private Button sqrtButton = new Button();
+    @FXML
+    private Button arctanhButton = new Button();
+    @FXML
+    private Button arccoshButton = new Button();
+    @FXML
+    private Button arccosButton = new Button();
+    @FXML
+    private Button arcsinhButton = new Button();
+    @FXML
+    private Button arcsinButton = new Button();
+    @FXML
+    private Button arctanButton = new Button();
+    @FXML
+    private Button logButton = new Button();
 
     @FXML
     protected TextField NumbField;
 
-    protected static BasicController instance;
+    protected static ComplexController instance;
 
     @FXML
     private Button[] BtnArray;
@@ -89,24 +121,41 @@ public class BasicController {
             RParenButton,
             DelButton,
             ClearButton,
-            ModeButton
+            ModeButton,
+            sinButton,
+            cosButton,
+            tanButton,
+            sinhButton,
+            coshButton,
+            tanhButton,
+            arcsinButton,
+            arccosButton,
+            arctanButton,
+            arcsinhButton,
+            arccoshButton,
+            arctanhButton,
+            sqrtButton,
+            iButton,
+            PowButton,
+            logButton
         };
 
         for (Button btn : BtnArray) {
             btn.setOnAction(e -> {
-                GuiApp.inputHandler(btn);
+                GuiApp.ComplexinputHandler(btn);
             });
         }
         NumbField.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
-            if (!key.getCharacter().matches("[0-9+\\-*/.()]")) {
+            String character = key.getCharacter();
+            if (!character.matches("[0-9+\\-*/.()]") && key.getCode() != KeyCode.ENTER) {
+                //[0-9+\\-*/.^()iA-Za-z]
                 key.consume();
             }
-            if (key.getCode() == KeyCode.ENTER || key.getCharacter().matches("=")) {
+            if (key.getCode() == KeyCode.ENTER || character.matches("=")) {
                 if (NumbField.getText().length() > 0) {
-                    GuiApp.inputHandler(EqualsButton);
+                    GuiApp.ComplexinputHandler(EqualsButton);
                 }
             }
         });
     }
-
 }
